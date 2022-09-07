@@ -1,1 +1,2 @@
-# Product CRUD processes implemented via golang and postgresql db
+# Product API 
+CRUD processes implemented via golang and postgresql db
