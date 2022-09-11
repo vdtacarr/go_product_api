@@ -34,7 +34,7 @@ func main() {
 
 	app.Post("/products", func(c *fiber.Ctx) error {
 		var product Product
-		
+
 		if err := c.BodyParser(&product); err != nil {
 			return c.SendString(err.Error())
 		}
@@ -64,8 +64,8 @@ func main() {
 
 		return ctx.SendStatus(fiber.StatusOK)
 	})
-    app.Delete("/deleteproduct/:id", func(ctx *fiber.Ctx) error {
-		id := ctx.ParamsInt("Id")
+	app.Delete("/deleteproduct/:id", func(ctx *fiber.Ctx) error {
+		id, _ := ctx.ParamsInt("Id")
 		err := db.Delete(id)
 		if err != nil {
 			ctx.SendString(err.Error())
@@ -117,7 +117,7 @@ func (db Db) Update(p Product) error {
 
 	return err
 }
-func (db Db) Delete(id int) error{
-	_ , err := db.pool.Exec("DELETE from products where id = $1", id)
+func (db Db) Delete(id int) error {
+	_, err := db.pool.Exec("DELETE from products where id = $1", id)
 	return err
 }
