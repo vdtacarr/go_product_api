@@ -118,6 +118,6 @@ func (db Db) Update(p Product) error {
 	return err
 }
 func (db Db) Delete(id int) error {
-	_, err := db.pool.Exec("DELETE from products where id = $1", id)
+	_, err := db.pool.Exec(context.Background(), "DELETE from products where id = $1", id)
 	return err
 }
