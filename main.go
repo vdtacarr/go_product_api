@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"go_db/entities"
+	"go_db/services"
 )
 
 func main() {
@@ -13,7 +15,7 @@ func main() {
 		fmt.Println("failed to connect to database: %w", err)
 	}
 
-	db := Db{pool: pool}
+	db := services.Db{Pool: pool}
 
 	app := fiber.New()
 	app.Use(func(c *fiber.Ctx) error {
@@ -24,7 +26,7 @@ func main() {
 		return c.JSON(db.List())
 	})
 	app.Post("/products", func(c *fiber.Ctx) error {
-		var product Product
+		var product entities.Product
 
 		if err := c.BodyParser(&product); err != nil {
 			return c.SendString(err.Error())
@@ -38,7 +40,7 @@ func main() {
 		return c.SendStatus(fiber.StatusCreated)
 	})
 	app.Put("/products/:id", func(ctx *fiber.Ctx) error {
-		var p Product
+		var p entities.Product
 		if err := ctx.BodyParser(&p); err != nil {
 			return ctx.SendStatus(fiber.StatusBadRequest)
 		}
