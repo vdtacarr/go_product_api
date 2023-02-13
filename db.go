@@ -21,7 +21,7 @@ func (db Db) List() []Product {
 
 	for rows.Next() {
 		p := Product{}
-		if err := rows.Scan(&p.Name, &p.Category, &p.Price, &p.ID); err != nil {
+		if err := rows.Scan(&p.Name, &p.Category, &p.Price, &p.Id); err != nil {
 			fmt.Println(err)
 			continue
 		}
@@ -42,7 +42,7 @@ func (db Db) Create(p Product) error {
 func (db Db) Update(p Product) error {
 	_, err := db.pool.Exec(context.Background(),
 		"UPDATE products set name=$1, category=$2, price=$3 WHERE id=$4",
-		p.Name, p.Category, p.Price, p.ID)
+		p.Name, p.Category, p.Price, p.Id)
 
 	return err
 }

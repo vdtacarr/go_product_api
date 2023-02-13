@@ -11,11 +11,11 @@ type Product struct {
 	Name     string
 	Category string
 	Price    int
-	ID       int
+	Id       int
 }
 
 func main() {
-	pool, err := pgxpool.Connect(context.Background(), "postgres://postgres:12345@localhost:5432/postgres")
+	pool, err := pgxpool.Connect(context.Background(), "postgres://postgres:postgres@localhost:5432/pegasus_app")
 	if err != nil {
 		fmt.Println("failed to connect to database: %w", err)
 	}
@@ -27,11 +27,9 @@ func main() {
 		fmt.Println(c.Method(), c.Path())
 		return c.Next()
 	})
-
 	app.Get("/products", func(c *fiber.Ctx) error {
 		return c.JSON(db.List())
 	})
-
 	app.Post("/products", func(c *fiber.Ctx) error {
 		var product Product
 
@@ -46,7 +44,6 @@ func main() {
 
 		return c.SendStatus(fiber.StatusCreated)
 	})
-
 	app.Put("/products/:id", func(ctx *fiber.Ctx) error {
 		var p Product
 		if err := ctx.BodyParser(&p); err != nil {
@@ -54,7 +51,7 @@ func main() {
 		}
 
 		id, _ := ctx.ParamsInt("id")
-		p.ID = id
+		p.Id = id
 
 		err := db.Update(p)
 		if err != nil {
@@ -74,5 +71,5 @@ func main() {
 
 		return ctx.SendStatus(fiber.StatusOK)
 	})
-	app.Listen(":8080")
+	app.Listen(":3000")
 }
