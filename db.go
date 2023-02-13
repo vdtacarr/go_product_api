@@ -21,7 +21,7 @@ func (db Db) List() []Product {
 
 	for rows.Next() {
 		p := Product{}
-		if err := rows.Scan(&p.Name, &p.Category, &p.Price, &p.Id); err != nil {
+		if err := rows.Scan(&p.Id, &p.Name, &p.Category, &p.Price); err != nil {
 			fmt.Println(err)
 			continue
 		}

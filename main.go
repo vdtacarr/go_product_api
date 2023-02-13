@@ -7,13 +7,6 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-type Product struct {
-	Name     string
-	Category string
-	Price    int
-	Id       int
-}
-
 func main() {
 	pool, err := pgxpool.Connect(context.Background(), "postgres://postgres:postgres@localhost:5432/pegasus_app")
 	if err != nil {
