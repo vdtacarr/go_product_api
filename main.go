@@ -25,6 +25,15 @@ func main() {
 	app.Get("/products", func(c *fiber.Ctx) error {
 		return c.JSON(db.List())
 	})
+	app.Get("products/:id", func(c *fiber.Ctx) error {
+		id, _ := c.ParamsInt("id")
+		product := db.GetById(id)
+		if product.Id == 0 {
+			c.SendString("No Item Found!")
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		return c.JSON(product)
+	})
 	app.Post("/products", func(c *fiber.Ctx) error {
 		var product entities.Product
 
@@ -39,7 +48,7 @@ func main() {
 
 		return c.SendStatus(fiber.StatusCreated)
 	})
-	app.Put("/products/:id", func(ctx *fiber.Ctx) error {
+	app.Put("/update-product/:id", func(ctx *fiber.Ctx) error {
 		var p entities.Product
 		if err := ctx.BodyParser(&p); err != nil {
 			return ctx.SendStatus(fiber.StatusBadRequest)
@@ -56,7 +65,7 @@ func main() {
 
 		return ctx.SendStatus(fiber.StatusOK)
 	})
-	app.Delete("/deleteproduct/:id", func(ctx *fiber.Ctx) error {
+	app.Delete("/delete-product/:id", func(ctx *fiber.Ctx) error {
 		id, _ := ctx.ParamsInt("Id")
 		err := db.Delete(id)
 		if err != nil {

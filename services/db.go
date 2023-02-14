@@ -31,7 +31,6 @@ func (db Db) List() []entities.Product {
 
 	return products
 }
-
 func (db Db) Create(p entities.Product) error {
 	_, err := db.Pool.Exec(context.Background(),
 		"INSERT INTO products (name, category, price) VALUES($1, $2, $3)",
@@ -39,7 +38,6 @@ func (db Db) Create(p entities.Product) error {
 
 	return err
 }
-
 func (db Db) Update(p entities.Product) error {
 	_, err := db.Pool.Exec(context.Background(),
 		"UPDATE products set name=$1, category=$2, price=$3 WHERE id=$4",
@@ -50,4 +48,10 @@ func (db Db) Update(p entities.Product) error {
 func (db Db) Delete(id int) error {
 	_, err := db.Pool.Exec(context.Background(), "DELETE from products where id = $1", id)
 	return err
+}
+func (db Db) GetById(id int) entities.Product {
+	product := entities.Product{}
+	row := db.Pool.QueryRow(context.Background(), "SELECT * FROM products where id = $1", id)
+	row.Scan(&product.Id, &product.Name, &product.Category, &product.Price)
+	return product
 }
