@@ -5,17 +5,21 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"product/configuration"
 	"product/entities"
 	"product/services"
 )
 
 func main() {
-	Pool, err := pgxpool.Connect(context.Background(), "postgres://postgres:postgres@localhost:5432/pegasus_app")
+	congfigPath := "db.relational.postgres.connString"
+	_, dbUrl := configuration.GetConfig(congfigPath)
+	fmt.Printf(dbUrl + "\n")
+	Pool, err := pgxpool.Connect(context.Background(), dbUrl)
 	if err != nil {
 		fmt.Println("failed to connect to database: %w", err)
 	}
 
-	db := services.NewProductServiceInstance(Pool)
+	productService := services.NewProductServiceInstance(Pool)
 
 	app := fiber.New()
 	app.Use(func(c *fiber.Ctx) error {
@@ -23,11 +27,11 @@ func main() {
 		return c.Next()
 	})
 	app.Get("/products", func(c *fiber.Ctx) error {
-		return c.JSON(db.List())
+		return c.JSON(productService.List())
 	})
 	app.Get("products/:id", func(c *fiber.Ctx) error {
 		id, _ := c.ParamsInt("id")
-		product := db.GetById(id)
+		product := productService.GetById(id)
 		if product.Id == 0 {
 			c.SendString("No Item Found!")
 			return c.SendStatus(fiber.StatusInternalServerError)
@@ -41,7 +45,7 @@ func main() {
 			return c.SendString(err.Error())
 		}
 
-		if err := db.Create(product); err != nil {
+		if err := productService.Create(product); err != nil {
 			c.SendString(err.Error())
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
@@ -57,7 +61,7 @@ func main() {
 		id, _ := ctx.ParamsInt("id")
 		p.Id = id
 
-		err := db.Update(p)
+		err := productService.Update(p)
 		if err != nil {
 			ctx.SendString(err.Error())
 			return ctx.SendStatus(fiber.StatusInternalServerError)
@@ -67,7 +71,7 @@ func main() {
 	})
 	app.Delete("/delete-product/:id", func(ctx *fiber.Ctx) error {
 		id, _ := ctx.ParamsInt("Id")
-		err := db.Delete(id)
+		err := productService.Delete(id)
 		if err != nil {
 			ctx.SendString(err.Error())
 			return ctx.SendStatus(fiber.StatusInternalServerError)

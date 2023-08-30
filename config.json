@@ -1,0 +1,9 @@
+{
+  "db": {
+    "relational": {
+      "postgres": {
+        "connString" : "postgres://postgres:postgres@localhost:5432/pegasus_app"
+      }
+    }
+  }
+}
