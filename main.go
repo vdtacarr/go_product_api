@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"go_db/entities"
-	"go_db/services"
+	"product/entities"
+	"product/services"
 )
 
 func main() {
-	pool, err := pgxpool.Connect(context.Background(), "postgres://postgres:postgres@localhost:5432/pegasus_app")
+	Pool, err := pgxpool.Connect(context.Background(), "postgres://postgres:postgres@localhost:5432/pegasus_app")
 	if err != nil {
 		fmt.Println("failed to connect to database: %w", err)
 	}
 
-	db := services.Db{Pool: pool}
+	db := services.NewProductServiceInstance(Pool)
 
 	app := fiber.New()
 	app.Use(func(c *fiber.Ctx) error {

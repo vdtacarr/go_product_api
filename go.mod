@@ -1,4 +1,4 @@
-module go_db
+module product
 
 go 1.19
 
@@ -9,9 +9,6 @@ require (
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
-	github.com/gofiber/fiber v1.14.6 // indirect
-	github.com/gofiber/utils v1.0.1 // indirect
-	github.com/gorilla/schema v1.2.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.14.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -21,8 +18,6 @@ require (
 	github.com/jackc/pgtype v1.14.0 // indirect
 	github.com/jackc/puddle v1.3.0 // indirect
 	github.com/klauspost/compress v1.15.15 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.44.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
